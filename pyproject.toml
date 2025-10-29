@@ -1,0 +1,144 @@
+[project]
+name = "eval-loop"
+description = "Evaluation based on rules"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Isabel Cabezas", email = "isabelcabezasm@users.noreply.github.com"},
+]
+dynamic = ["version"]
+
+dependencies = [
+  "azure-identity>=1.23.0",
+  "python-dotenv>=1.0.0",
+  "pydantic>=2.11.7",
+  "scipy>=1.15.3",
+  "openai>=1.0.0",
+]
+
+[dependency-groups]
+dev = [
+  "pyright>=1.1.402",
+  "ruff>=0.12.0",
+  "ipykernel>=6.29.5",
+  "pip>=25.1.1",
+  "pytest>=8.4.1",
+]
+
+[tool.uv]
+default-groups = "all"
+
+[project.urls]
+Homepage = "https://github.com/isabelcabezasm/eval-loop"
+Repository = "https://github.com/isabelcabezasm/eval-loop"
+Issues = "https://github.com/isabelcabezasm/eval-loop/issues"
+
+[project.scripts]
+eval-loop = "eval.baseline.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/eval/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eval"]
+
+[tool.pyright]
+pythonVersion = "3.10"
+typeCheckingMode = "basic"
+
+[tool.ruff]
+src = ["src", "tests"]
+line-length = 100
+target-version = "py310"
+show-fixes = true
+lint.select = [
+  "B0",     # bugbear
+  "E",      # pycodestyle
+  "F",      # Pyflakes
+  "I",      # import order
+  "UP",     # pyupgrade
+  "RUF100", # valid noqa annnotations
+]
+
+
+
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["eval", "report_generation"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]
+addopts = "--import-mode=importlib"
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]

@@ -1,0 +1,77 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Baseline Main",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/eval/baseline/main.py",
+            "args": [
+                "--data_path",
+                "./data"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            },
+            "python": "${workspaceFolder}/.venv/bin/python"
+        },
+        {
+            "name": "Debug Baseline Main (Custom Data Path)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/eval/baseline/main.py",
+            "args": [
+                "--data_path",
+                "${input:dataPath}"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            },
+            "python": "${workspaceFolder}/.venv/bin/python"
+        },
+        {
+            "name": "Debug Experiment 01 Main",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/eval/experiment_01/main.py",
+            "args": [
+                "--data_path",
+                "./data"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            },
+            "python": "${workspaceFolder}/.venv/bin/python"
+        },
+        {
+            "name": "Debug Main Entry Point",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/eval/main.py",
+            "args": [
+                "--data_path",
+                "./data"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            },
+            "python": "${workspaceFolder}/.venv/bin/python"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "dataPath",
+            "description": "Enter the data path",
+            "default": "./data",
+            "type": "promptString"
+        }
+    ]
+}
