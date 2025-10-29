@@ -56,11 +56,13 @@ env.bak/
 venv.bak/
 
 # IDEs
-.vscode/
 .idea/
 *.swp
 *.swo
 *~
+
+# Nested repositories
+eval-loop/
 
 # OS generated files
 .DS_Store
