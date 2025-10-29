@@ -61,9 +61,6 @@ venv.bak/
 *.swo
 *~
 
-# Nested repositories
-eval-loop/
-
 # OS generated files
 .DS_Store
 .DS_Store?
