@@ -1,4 +1,5 @@
 """Report generation main script."""
+
 import argparse
 
 
@@ -13,11 +14,9 @@ def main():
     """Main entry point for report generation."""
     parser = argparse.ArgumentParser(description="Generate evaluation reports")
     parser.add_argument(
-        "--data_path",
-        required=True,
-        help="Path to the evaluation data"
+        "--data_path", required=True, help="Path to the evaluation data"
     )
-    
+
     args = parser.parse_args()
     generate_report(args.data_path)
 
