@@ -1,0 +1,64 @@
+{
+    "name": "Eval Loop Development",
+    "image": "mcr.microsoft.com/devcontainers/base:jammy",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/git:1": {}
+    },
+    "postCreateCommand": "chmod +x ./.devcontainer/post_create.sh && ./.devcontainer/post_create.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "github.copilot", // GitHub Copilot + Copilot Chat
+                "markdown-lint.markdownlinter",
+                "ms-python.python", // Python extension
+                "ms-python.vscode-pylance", // Pylance extension for Python
+                "ms-python.debugpy", // Debugpy extension for Python        
+                "ms-python.flake8",
+                "ms-python.pylint",
+                "ms-toolsai.jupyter",
+                "charliermarsh.ruff",
+                "ms-python.mypy-type-checker",
+                "ms-python.debugpy",
+                "tamasfe.even-better-toml",
+                "redhat.vscode-yaml",
+                "streetsidesoftware.code-spell-checker",
+                "ms-vscode.vscode-json",
+                "github.copilot",
+                "github.copilot-chat"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.linting.enabled": true,
+                "python.linting.ruffEnabled": true,
+                "python.linting.pylintEnabled": false,
+                "python.linting.flake8Enabled": false,
+                "python.formatting.provider": "black",
+                "python.linting.mypyEnabled": true,
+                "python.analysis.typeCheckingMode": "basic",
+                "python.analysis.autoImportCompletions": true,
+                "files.associations": {
+                    "*.toml": "toml"
+                },
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": "explicit",
+                    "source.fixAll.ruff": "explicit"
+                },
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    },
+    "forwardPorts": [],
+    "remoteUser": "vscode",
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "containerEnv": {
+        "PYTHONPATH": "/workspaces/eval-loop/src",
+        "TERM": "xterm-256color"
+    },
+    "workspaceFolder": "/workspaces/eval-loop",
+    "shutdownAction": "none"
+}

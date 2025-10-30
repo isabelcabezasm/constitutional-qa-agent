@@ -2,44 +2,51 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Baseline Main",
+            "name": "Python: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/src/eval/baseline/main.py",
+            "program": "${file}",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/src"
-            },
-            "python": "${workspaceFolder}/.venv/bin/python"
-        },   
-        {
-            "name": "Debug Experiment 01 Main",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/src/eval/experiment_01/main.py",
-            "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}",
-            "env": {
-                "PYTHONPATH": "${workspaceFolder}/src"
-            },
-            "python": "${workspaceFolder}/.venv/bin/python"
+            }
         },
         {
-            "name": "Debug Main Entry Point",
+            "name": "Run Eval Main",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/src/eval/main.py",
+            "module": "eval.main",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            }
+        },
+        {
+            "name": "Run Baseline",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "eval.baseline.main",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            }
+        },
+        {
+            "name": "Python: Pytest",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
             "args": [
-                "--data_path",
-                "./data"
+                "${workspaceFolder}/tests"
             ],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/src"
-            },
-            "python": "${workspaceFolder}/.venv/bin/python"
+            }
         }
     ]
 }
