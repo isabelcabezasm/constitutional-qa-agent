@@ -4,7 +4,8 @@
     "features": {
         "ghcr.io/devcontainers/features/docker-in-docker:2": {},
         "ghcr.io/devcontainers/features/github-cli:1": {},
-        "ghcr.io/devcontainers/features/git:1": {}
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/azure-cli:1": {}
     },
     "postCreateCommand": "chmod +x ./.devcontainer/post_create.sh && ./.devcontainer/post_create.sh",
     "customizations": {
@@ -15,12 +16,10 @@
                 "ms-python.python", // Python extension
                 "ms-python.vscode-pylance", // Pylance extension for Python
                 "ms-python.debugpy", // Debugpy extension for Python        
-                "ms-python.flake8",
                 "ms-python.pylint",
                 "ms-toolsai.jupyter",
                 "charliermarsh.ruff",
-                "ms-python.mypy-type-checker",
-                "ms-python.debugpy",
+                "ms-pyright.pyright",
                 "tamasfe.even-better-toml",
                 "redhat.vscode-yaml",
                 "streetsidesoftware.code-spell-checker",
@@ -33,7 +32,6 @@
                 "python.linting.enabled": true,
                 "python.linting.ruffEnabled": true,
                 "python.linting.pylintEnabled": false,
-                "python.linting.flake8Enabled": false,
                 "python.formatting.provider": "black",
                 "python.linting.mypyEnabled": true,
                 "python.analysis.typeCheckingMode": "basic",
