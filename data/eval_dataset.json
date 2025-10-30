@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "query": "How can meeting recommended physical activity guidelines influence your health insurance risk profile?",
+        "context": "Health insurance companies assess risk based on lifestyle factors such as exercise habits.",
+        "expected_answer": "It reduces long-term health risks, which can lower claim frequency and potentially improve premium stability.",
+        "reasoning": [
+            "Regular physical activity improves overall health.",
+            "Lower health risks lead to fewer medical claims.",
+            "Fewer claims can result in better insurance terms or lower premiums."
+        ],
+        "axioms_used": [
+            "AXIOM-001"
+        ]
+    },
+    {
+        "id": 2,
+        "query": "Why do insurers encourage annual health screenings with normal results?",
+        "context": "Preventive check-ups are often incentivized by health insurance providers.",
+        "expected_answer": "Because they lower the probability of high-cost claims, helping maintain lower premiums and better coverage options.",
+        "reasoning": [
+            "Annual screenings detect issues early.",
+            "Early detection prevents expensive treatments.",
+            "Lower claim costs benefit both insurer and insured."
+        ],
+        "axioms_used": [
+            "AXIOM-002"
+        ]
+    },
+    {
+        "id": 3,
+        "query": "How does a balanced diet affect your health insurance costs over time?",
+        "context": "Nutrition habits are linked to chronic disease risk and insurance expenses.",
+        "expected_answer": "It decreases chronic disease incidence, reducing associated medical expenses and claim costs.",
+        "reasoning": [
+            "Balanced nutrition lowers chronic disease risk.",
+            "Fewer chronic conditions mean fewer claims.",
+            "Lower claims can stabilize or reduce insurance costs."
+        ],
+        "axioms_used": [
+            "AXIOM-003"
+        ]
+    },
+    {
+        "id": 4,
+        "query": "Why do insurers encourage annual health screenings with normal results?",
+        "context": "Preventive check-ups are often incentivized by health insurance providers.",
+        "expected_answer": "Because they lower the probability of high-cost claims, helping maintain lower premiums and better coverage options.",
+        "reasoning": [
+            "Annual screenings detect issues early.",
+            "Early detection prevents expensive treatments.",
+            "Lower claim costs benefit both insurer and insured."
+        ],
+        "axioms_used": [
+            "AXIOM-002"
+        ]
+    },
+    {
+        "id": 5,
+        "query": "What effect does maintaining a balanced diet have on chronic disease incidence?",
+        "context": "Chronic diseases significantly impact health insurance costs and claim frequency.",
+        "expected_answer": "It decreases chronic disease incidence and associated costs.",
+        "reasoning": [
+            "Balanced diet improves metabolic and cardiovascular health.",
+            "Lower chronic disease risk reduces medical interventions.",
+            "Fewer interventions mean lower insurance claims and costs."
+        ],
+        "axioms_used": [
+            "AXIOM-003"
+        ]
+    }
+]
