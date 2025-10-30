@@ -4,7 +4,7 @@ from azure.core.credentials import TokenCredential
 from azure.identity import AzureCliCredential
 
 from core.axiom_store import load_from_json
-from core.azure_openai import azure_chat_openai_client, create_qa_engine_with_config
+from core.azure_openai import create_qa_engine_with_config
 from core.paths import root
 from core.qa_engine import QAEngine
 
