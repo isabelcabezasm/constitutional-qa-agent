@@ -1,29 +1,25 @@
-{%- for axiom in axioms -%}
-
-## {{ axiom.id }}
+## {{ id }}
 
 ### Subject
 
-{{ axiom.subject }}
+{{ subject }}
 
 ### Object
 
-{{ axiom.object }}
+{{ object }}
 
 ### Link
 
-{{ axiom.link }}
+{{ link }}
 
 ### Conditions
 
-{{ axiom.conditions }}
+{{ conditions }}
 
 ### Description
 
-{{ axiom.description }}
+{{ description }}
 
 ### Amendments
 
-{{ axiom.amendments }}
-
-{% endfor %}
+{{ amendments }}
