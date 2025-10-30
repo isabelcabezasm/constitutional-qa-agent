@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 from eval.eval import run_evaluation
+from eval.main import run_evaluation_with_qa_function
 
 async def generate_answer(*, query: str) -> str:
     print(f"Generating answer for query: {query}")
@@ -8,22 +9,9 @@ async def generate_answer(*, query: str) -> str:
 
 def main():
     """
-    Main function that parses command line arguments and runs the evaluation.
+    Main function that runs the baseline evaluation.
     """
-    parser = argparse.ArgumentParser(description="Run evaluation on provided data")
-    parser.add_argument(
-        "--data_path",
-        required=False,
-        help="Path to the data file or directory (optional, defaults to data/eval_dataset.json)"
-    )
-    
-    args = parser.parse_args()
-    
-    # Run the async evaluation function
-    asyncio.run(run_evaluation(
-        question_answer_fn=generate_answer,
-        input_data_path=args.data_path
-    ))
+    run_evaluation_with_qa_function(generate_answer)
 
 
 if __name__ == "__main__":

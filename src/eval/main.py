@@ -1,31 +1,41 @@
 import argparse
 import asyncio
-from eval.eval import run_evaluation
+from eval.eval import run_evaluation, QuestionAnswerFunction
 
 
-def main():
+def run_evaluation_with_qa_function(question_answer_fn: QuestionAnswerFunction):
     """
-    Main function that parses command line arguments and runs the evaluation.
+    Reusable main function that parses command line arguments and runs the evaluation.
+    
+    Args:
+        question_answer_fn: The question-answer function to use for evaluation
     """
     parser = argparse.ArgumentParser(description="Run evaluation on provided data")
     parser.add_argument(
         "--data_path",
-        required=True,
-        help="Path to the data file or directory (mandatory)"
+        required=False,
+        help="Path to the data file or directory (optional, defaults to data/eval_dataset.json)"
     )
     
     args = parser.parse_args()
     
+    # Run the async evaluation function
+    asyncio.run(run_evaluation(
+        question_answer_fn=question_answer_fn,
+        input_data_path=args.data_path
+    ))
+
+
+def main():
+    """
+    Default main function with a dummy question-answer function.
+    """
     # TODO: For now, we'll need to provide a dummy question_answer_fn
     # This should be properly implemented based on your requirements
     async def dummy_qa_fn(*, query: str) -> str:
         return f"Generated answer for: {query}"
     
-    # Run the async evaluation function
-    asyncio.run(run_evaluation(
-        question_answer_fn=dummy_qa_fn,
-        input_data_path=args.data_path
-    ))
+    run_evaluation_with_qa_function(dummy_qa_fn)
 
 
 if __name__ == "__main__":
