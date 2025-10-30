@@ -13,8 +13,8 @@ def main():
     parser = argparse.ArgumentParser(description="Run evaluation on provided data")
     parser.add_argument(
         "--data_path",
-        required=True,
-        help="Path to the data file or directory (mandatory)"
+        required=False,
+        help="Path to the data file or directory (optional, defaults to data/eval_dataset.json)"
     )
     
     args = parser.parse_args()
