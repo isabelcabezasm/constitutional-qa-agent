@@ -9,7 +9,12 @@ from pydantic import BaseModel
 from core.paths import root
 from eval.metrics.accuracy import get_accuracy
 from eval.metrics.extract_entities import get_entities
-from eval.metrics.models import AccuracyEvaluationResults, EntityExtraction
+from eval.metrics.models import (
+    AccuracyEvaluationResults,
+    EntityExtraction,
+    TopicCoverageEvaluationResults,
+)
+from eval.metrics.topic_coverage import get_topic_coverage
 
 
 class EvaluationSampleInput(BaseModel):
@@ -58,7 +63,7 @@ class EvaluationSampleOutput(BaseModel):
     llm_response: str
     entities: EntityExtraction
     accuracy: AccuracyEvaluationResults
-    topic_coverage: float
+    topic_coverage: TopicCoverageEvaluationResults
 
 
 class Metric(BaseModel):
@@ -188,29 +193,59 @@ async def evaluate_answer(
         expected_answer=sample_input.expected_answer,
     )
 
+    topic_coverage = await get_topic_coverage(entity_list=entities)
+
     return EvaluationSampleOutput(
         input=sample_input,
         llm_response=llm_answer,
         entities=entities,
         accuracy=accuracy,
-        topic_coverage=0.0,
+        topic_coverage=topic_coverage,
     )
 
 
 def calculate_stats(evaluation_results) -> EvaluationResult:
     """
-    Calculate statistical metrics from evaluation results. Args:
+    Calculate statistical metrics from evaluation results.
+    
+    Args:
         evaluation_results: Collection of evaluation outputs to analyze
+        
     Returns:
         EvaluationResult: Object containing the evaluation outputs and computed
-        statistical metrics including accuracy and topic coverage, both initialized with
-        mean and standard deviation values of 0.0
+        statistical metrics including accuracy and topic coverage.
     """
+    if not evaluation_results:
+        return EvaluationResult(
+            evaluation_outputs=[],
+            accuracy=AccuracyMetric(mean=0.0, std=0.0),
+            topic_coverage=CoverageMetric(mean=0.0, std=0.0),
+        )
+
+    # Calculate accuracy statistics
+    accuracy_scores = [result.accuracy.accuracy_mean for result in evaluation_results]
+    accuracy_mean = sum(accuracy_scores) / len(accuracy_scores)
+    accuracy_variance = (
+        sum((score - accuracy_mean) ** 2 for score in accuracy_scores) 
+        / len(accuracy_scores)
+    )
+    accuracy_std = accuracy_variance ** 0.5 if len(accuracy_scores) > 1 else 0.0
+
+    # Calculate topic coverage statistics
+    coverage_scores = [
+        result.topic_coverage.coverage_score for result in evaluation_results
+    ]
+    coverage_mean = sum(coverage_scores) / len(coverage_scores)
+    coverage_variance = (
+        sum((score - coverage_mean) ** 2 for score in coverage_scores) 
+        / len(coverage_scores)
+    )
+    coverage_std = coverage_variance ** 0.5 if len(coverage_scores) > 1 else 0.0
 
     return EvaluationResult(
         evaluation_outputs=evaluation_results,
-        accuracy=AccuracyMetric(mean=0.0, std=0.0),
-        topic_coverage=CoverageMetric(mean=0.0, std=0.0),
+        accuracy=AccuracyMetric(mean=accuracy_mean, std=accuracy_std),
+        topic_coverage=CoverageMetric(mean=coverage_mean, std=coverage_std),
     )
 
 

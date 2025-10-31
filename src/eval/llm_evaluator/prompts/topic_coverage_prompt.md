@@ -1,6 +1,6 @@
 Compare the following two list of entities:
-Expected entities: {{expected_entities}}
-Generated entities: {{generated_entities}}
+Expected entities: {expected_entities}
+Generated entities: {generated_entities}
 
 Your task is to:
 

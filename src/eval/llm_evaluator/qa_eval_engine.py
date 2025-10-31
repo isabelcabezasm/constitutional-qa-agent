@@ -5,7 +5,11 @@ from anyio import Path
 from pydantic import BaseModel
 
 from core.qa_engine import QAEngine
-from eval.metrics.models import AccuracyEvaluationResults, EntityExtraction
+from eval.metrics.models import (
+    AccuracyEvaluationResults,
+    EntityExtraction,
+    TopicCoverageEvaluationResults,
+)
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -117,9 +121,34 @@ class QAEvalEngine(QAEngine):
             metric_prompt, AccuracyEvaluationResults
         )
 
-    async def topic_coverage_evaluator(self):
+    async def topic_coverage_evaluation(
+        self, entity_list: EntityExtraction
+    ) -> TopicCoverageEvaluationResults:
         """
         Evaluate the topic coverage of the LLM-generated answer against the expected
         answer.
+
+        This method assesses whether the topics represented by entities in the
+        expected answer are covered in the generated answer. It focuses on recall
+        (coverage) by checking if all expected entities appear in some form in the
+        generated entities.
         """
-        pass
+        # Convert expected entities to a formatted string for the prompt
+        expected_entities_str = ", ".join(
+            f"('{entity.trigger_variable}', '{entity.consequence_variable}')"
+            for entity in entity_list.expected_answer_entities
+        )
+
+        # Convert generated entities to a formatted string for the prompt
+        generated_entities_str = ", ".join(
+            f"('{entity.trigger_variable}', '{entity.consequence_variable}')"
+            for entity in entity_list.llm_answer_entities
+        )
+
+        metric_prompt = self._get_prompt("topic_coverage").format(
+            expected_entities=expected_entities_str,
+            generated_entities=generated_entities_str,
+        )
+        return await self._perform_model_invocation(
+            metric_prompt, TopicCoverageEvaluationResults
+        )

@@ -83,3 +83,28 @@ class AccuracyEvaluationResults(BaseModel):
         return sum(entity.score for entity in self.entity_accuracies) / len(
             self.entity_accuracies
         )
+
+
+class TopicCoverageEvaluationResults(BaseModel):
+    """
+    A model for storing topic coverage evaluation results.
+
+    This model evaluates how well the generated answer covers the expected topics
+    by comparing entities between expected and generated content. It focuses on
+    recall (coverage) rather than precision.
+    """
+
+    reason: str = Field(
+        description=(
+            "Detailed explanation of the coverage analysis, including exact matches, "
+            "approximate matches, and missing entities."
+        )
+    )
+    coverage_score: float = Field(
+        description=(
+            "Coverage score representing the percentage of expected entities present "
+            "in generated entities, between 0.0 and 1.0."
+        ),
+        ge=0.0,
+        le=1.0,
+    )
