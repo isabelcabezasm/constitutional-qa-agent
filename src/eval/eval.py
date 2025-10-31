@@ -7,8 +7,9 @@ from typing import Protocol
 from pydantic import BaseModel
 
 from core.paths import root
+from eval.metrics.accuracy import get_accuracy
 from eval.metrics.extract_entities import get_entities
-from eval.metrics.models import EntityExtraction
+from eval.metrics.models import AccuracyEvaluationResults, EntityExtraction
 
 
 class EvaluationSampleInput(BaseModel):
@@ -56,7 +57,7 @@ class EvaluationSampleOutput(BaseModel):
     input: EvaluationSampleInput
     llm_response: str
     entities: EntityExtraction
-    accuracy: float
+    accuracy: AccuracyEvaluationResults
     topic_coverage: float
 
 
@@ -181,11 +182,17 @@ async def evaluate_answer(
         expected_answer=sample_input.expected_answer,
     )
 
+    accuracy = await get_accuracy(
+        entity_list=entities,
+        llm_answer=llm_answer,
+        expected_answer=sample_input.expected_answer,
+    )
+
     return EvaluationSampleOutput(
         input=sample_input,
         llm_response=llm_answer,
         entities=entities,
-        accuracy=0.0,
+        accuracy=accuracy,
         topic_coverage=0.0,
     )
 

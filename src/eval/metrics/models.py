@@ -33,12 +33,53 @@ class EntityExtraction(BaseModel):
     context.
     """
 
-    user_query_entities: list[str] = Field(
+    user_query_entities: list[Entity] = Field(
         description="Entities extracted from the user query."
     )
-    llm_answer_entities: list[str] = Field(
+    llm_answer_entities: list[Entity] = Field(
         description="Entities extracted from the LLM answer."
     )
-    expected_answer_entities: list[str] = Field(
+    expected_answer_entities: list[Entity] = Field(
         description="Entities extracted from the expected answer."
     )
+
+
+class EntityAccuracy(BaseModel):
+    """
+    Represents the accuracy evaluation for a specific entity.
+    """
+
+    entity: str = Field(description="The entity being evaluated for accuracy.")
+    reason: str = Field(
+        description="Explanation of why this accuracy score was assigned."
+    )
+    score: float = Field(
+        description="Accuracy score for the entity, between 0.0 and 1.0.",
+        ge=0.0,
+        le=1.0,
+    )
+
+
+class AccuracyEvaluationResults(BaseModel):
+    """
+    A model for storing accuracy evaluation results for multiple entities.
+    """
+
+    entity_accuracies: list[EntityAccuracy] = Field(
+        description="List of accuracy evaluations for each entity."
+    )
+    accuracy_mean: float = Field(
+        description="Overall accuracy score across all entities, between 0.0 and 1.0.",
+        ge=0.0,
+        le=1.0,
+    )
+
+    def calculate_accuracy_mean(self) -> float:
+        """
+        Calculate the mean accuracy score across all entities.
+        """
+        if not self.entity_accuracies:
+            return 0.0
+        return sum(entity.score for entity in self.entity_accuracies) / len(
+            self.entity_accuracies
+        )
