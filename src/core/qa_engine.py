@@ -144,16 +144,17 @@ class QAEngine:
         # Format constitution by replacing template variables for each axiom
         formatted_constitution = ""
         for axiom in axiom_list:
-            # Create a copy of the template for each axiom and format it
-            axiom_section = template_content.format(
-                id=axiom.id,
-                subject=axiom.subject,
-                object=axiom.entity,  # Map entity to object
-                link=axiom.trigger,  # Map trigger to link
-                conditions=axiom.conditions,
-                description=axiom.description,
-                amendments=f"Category: {axiom.category}",  # Map category to amendments
-            )
+            # Escape curly braces in all axiom fields to prevent format errors
+            safe_fields = {
+                "id": str(axiom.id).replace("{", "{{").replace("}", "}}"),
+                "subject": str(axiom.subject).replace("{", "{{").replace("}", "}}"),
+                "object": str(axiom.entity).replace("{", "{{").replace("}", "}}"),  # Map entity to object
+                "link": str(axiom.trigger).replace("{", "{{").replace("}", "}}"),  # Map trigger to link
+                "conditions": str(axiom.conditions).replace("{", "{{").replace("}", "}}"),
+                "description": str(axiom.description).replace("{", "{{").replace("}", "}}"),
+                "amendments": f"Category: {str(axiom.category).replace('{', '{{').replace('}', '}}')}",  # Map category to amendments
+            }
+            axiom_section = template_content.format(**safe_fields)
 
             formatted_constitution += axiom_section + "\n"
 
