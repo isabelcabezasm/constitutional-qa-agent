@@ -5,7 +5,6 @@ This module provides the QAEngine class that handles question-answering
 using Azure OpenAI with constitution-based prompting via the Microsoft Agent Framework.
 """
 
-import asyncio
 import json
 
 from agent_framework import ChatAgent
@@ -135,7 +134,7 @@ class QAEngine:
 
         return formatted_prompt
 
-    def invoke(self, question: str) -> str:
+    async def invoke(self, question: str) -> str:
         """
         Process a user question and generate a response using Azure OpenAI.
 
@@ -166,6 +165,6 @@ class QAEngine:
         user_prompt = self._load_and_format_user_prompt(question)
 
         # Use asyncio to run the async agent
-        response = asyncio.run(self.agent.run(user_prompt))
+        response = await self.agent.run(user_prompt)
 
         return str(response.text)

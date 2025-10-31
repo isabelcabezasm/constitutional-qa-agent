@@ -130,7 +130,7 @@ class QuestionAnswerFunction(Protocol):
     """
 
     # this is just the protocol
-    def __call__(self, *, query: str) -> str:  # pyright: ignore[reportReturnType]
+    async def __call__(self, *, query: str) -> str:  # pyright: ignore[reportReturnType]
         """
         Takes a user query and returns a generated scenario.
 
@@ -235,7 +235,7 @@ async def run_evaluation(
     async def process_sample(sample_data: str) -> EvaluationSampleOutput:
         parsed_input = EvaluationSampleInput.model_validate(sample_data)
 
-        llm_response = question_answer_fn(query=parsed_input.query)
+        llm_response = await question_answer_fn(query=parsed_input.query)
 
         _ = (output_path / f"results_{parsed_input.id}.md").write_text(llm_response)
         return await evaluate_answer(parsed_input, llm_response)
