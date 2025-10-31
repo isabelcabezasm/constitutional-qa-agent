@@ -30,7 +30,6 @@
                 "python.defaultInterpreterPath": "/usr/local/bin/python",
                 "python.linting.enabled": true,
                 "python.linting.ruffEnabled": true,
-                "python.linting.pylintEnabled": false,
                 "python.formatting.provider": "black",
                 "python.analysis.typeCheckingMode": "basic",
                 "python.analysis.autoImportCompletions": true,
