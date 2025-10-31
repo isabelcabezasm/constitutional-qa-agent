@@ -1,5 +1,6 @@
 from functools import cache, lru_cache
 
+from agent_framework import ChatAgent
 from azure.core.credentials import TokenCredential
 from azure.identity import AzureCliCredential
 
@@ -11,6 +12,7 @@ from core.qa_engine import QAEngine
 
 @cache
 def credential() -> TokenCredential:
+    """Get Azure token credential for authentication."""
     # Use WorkloadIdentityCredential if running in a Kubernetes environment
     return AzureCliCredential()
 
@@ -22,7 +24,15 @@ def azure_chat_openai():
 
 
 @cache
+def chat_agent() -> ChatAgent:
+    """Create and cache the ChatAgent with system prompt."""
+    system_prompt = (root() / "src/core/prompts/system_prompt.md").read_text()
+    return azure_chat_openai().create_agent(instructions=system_prompt)
+
+
+@cache
 def axiom_store():
+    """Load and cache the constitutional axioms from JSON data file."""
     return load_from_json((root() / "data/constitution.json").read_text())
 
 
@@ -30,6 +40,6 @@ def axiom_store():
 def qa_engine() -> QAEngine:
     """Create and cache the QA Engine with Agent Framework client."""
     return QAEngine(
-        chat=azure_chat_openai(),
+        agent=chat_agent(),
         axiom_store=axiom_store(),
     )
