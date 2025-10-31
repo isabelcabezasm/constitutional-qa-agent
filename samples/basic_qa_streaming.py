@@ -44,7 +44,6 @@ async def main():
                 axiom = chunk.axiom
                 # Use ANSI color codes: cyan and bold for citations
                 print(f"\033[1;36m[{axiom.id}]\033[0m", end="", flush=True)
-                
                 # Collect citation for reference section
                 if axiom not in citations:
                     citations.append(axiom)
