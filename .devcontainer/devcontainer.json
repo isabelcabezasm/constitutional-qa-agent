@@ -1,5 +1,5 @@
 {
-    "name": "Eval Loop Development",
+    "name": "Constitutional Q&A Agent Development",
     "image": "mcr.microsoft.com/devcontainers/base:jammy",
     "features": {
         "ghcr.io/devcontainers/features/docker-in-docker:2": {},
@@ -54,9 +54,9 @@
         "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
     ],
     "containerEnv": {
-        "PYTHONPATH": "/workspaces/eval-loop/src",
+        "PYTHONPATH": "/workspaces/constitutional-qa-agent/src",
         "TERM": "xterm-256color"
     },
-    "workspaceFolder": "/workspaces/eval-loop",
+    "workspaceFolder": "/workspaces/constitutional-qa-agent",
     "shutdownAction": "none"
 }

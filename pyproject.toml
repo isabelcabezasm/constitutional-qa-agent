@@ -1,11 +1,12 @@
 [project]
-name = "eval-loop"
-description = "Evaluation based on rules"
+name = "constitutional-qa-agent"
+description = "Constitutional Q&A Agent"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
-  { name = "Isabel Cabezas", email = "isabelcabezasm@users.noreply.github.com" },
+  { name = "Isabel Cabezas", email = "isacabe@microsoft.com" },
+  { name = "Marc Gomez", email = "marcgomez@microsoft.com" },
 ]
 dynamic = ["version"]
 
@@ -31,12 +32,12 @@ dev = [
 default-groups = "all"
 
 [project.urls]
-Homepage = "https://github.com/isabelcabezasm/eval-loop"
-Repository = "https://github.com/isabelcabezasm/eval-loop"
-Issues = "https://github.com/isabelcabezasm/eval-loop/issues"
+Homepage = "https://github.com/isabelcabezasm/constitutional-qa-agent"
+Repository = "https://github.com/isabelcabezasm/constitutional-qa-agent"
+Issues = "https://github.com/isabelcabezasm/constitutional-qa-agent/issues"
 
 [project.scripts]
-eval-loop = "eval.baseline.main:main"
+constitutional-qa-agent = "eval.baseline.main:main"
 
 [build-system]
 requires = ["hatchling"]

@@ -1,4 +1,4 @@
-"""Core utilities and dependencies for the eval-loop project."""
+"""Core utilities and dependencies."""
 
 from .azure_openai import AzureOpenAIConfig, azure_chat_openai_client
 from .dependencies import credential
