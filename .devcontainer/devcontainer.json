@@ -16,7 +16,6 @@
                 "ms-python.python", // Python extension
                 "ms-python.vscode-pylance", // Pylance extension for Python
                 "ms-python.debugpy", // Debugpy extension for Python        
-                "ms-python.pylint",
                 "ms-toolsai.jupyter",
                 "charliermarsh.ruff",
                 "ms-pyright.pyright",
@@ -33,7 +32,6 @@
                 "python.linting.ruffEnabled": true,
                 "python.linting.pylintEnabled": false,
                 "python.formatting.provider": "black",
-                "python.linting.mypyEnabled": true,
                 "python.analysis.typeCheckingMode": "basic",
                 "python.analysis.autoImportCompletions": true,
                 "files.associations": {
