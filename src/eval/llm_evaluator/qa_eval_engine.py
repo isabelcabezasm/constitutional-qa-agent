@@ -62,9 +62,6 @@ class QAEvalEngine(QAEngine):
     async def _perform_model_invocation(self, prompt: str, output_type: type[T]) -> T:
         """Invoke the model and parse the output into the specified Pydantic model."""
 
-        # Load system prompt
-        system_prompt = self._get_prompt("system")
-
         # Use asyncio to run the async agent with structured output
         response = await self.agent.run(prompt, response_format=output_type)
         assert isinstance(response.value, output_type)
