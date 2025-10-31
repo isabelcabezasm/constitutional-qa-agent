@@ -3,7 +3,6 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Protocol
-from xml.dom.minidom import Entity
 
 from pydantic import BaseModel
 
