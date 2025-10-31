@@ -8,7 +8,6 @@ using Azure OpenAI with constitution-based prompting via the Microsoft Agent Fra
 import json
 
 from agent_framework import ChatAgent
-from agent_framework.azure import AzureOpenAIChatClient
 
 from core.axiom_store import Axiom, AxiomStore
 from core.paths import root
@@ -29,19 +28,18 @@ class QAEngine:
 
     def __init__(
         self,
-        chat: AzureOpenAIChatClient,
+        agent: ChatAgent,
         axiom_store: AxiomStore | None = None,
     ):
         """
         Initialize the QA Engine.
 
         Args:
-            chat: Azure OpenAI chat client instance for model inference.
+            agent: ChatAgent instance for model inference.
             axiom_store: Optional storage for axioms (defaults to loading from file).
         """
-        self.chat = chat
+        self.agent = agent
         self.axiom_store = axiom_store
-        self.agent: ChatAgent | None = None
 
     def _load_constitution_data(self) -> list[Axiom]:
         """
@@ -97,17 +95,6 @@ class QAEngine:
 
         return formatted_constitution
 
-    def _load_system_prompt(self) -> str:
-        """
-        Load the system prompt.
-
-        Returns:
-            System prompt text.
-        """
-        system_prompt_file = root() / "src/core/prompts/system_prompt.md"
-        with open(system_prompt_file, encoding="utf-8") as f:
-            return f.read()
-
     def _load_and_format_user_prompt(self, question: str) -> str:
         """
         Load and format the user prompt with constitution and question.
@@ -138,33 +125,44 @@ class QAEngine:
         """
         Process a user question and generate a response using Azure OpenAI.
 
-        This method:
-        1. Loads and formats the constitution with axiom data
-        2. Prepares the system prompt (used as agent instructions)
-        3. Formats the user prompt with the question and constitution
-        4. Creates a ChatAgent with system instructions
-        5. Queries the Azure OpenAI model via the Agent Framework
-        6. Returns the generated response
+        This method collects all chunks from the streaming response and returns
+        the complete response as a single string.
 
         Args:
             question: The user's question.
 
         Returns:
-            The AI-generated response based on the constitution and prompts.
+            The complete AI-generated response based on the constitution and prompts.
         """
+        # Collect all chunks from the streaming response
+        chunks = []
+        async for chunk in self.invoke_stream(question):
+            chunks.append(chunk)
 
-        # Load system prompt to use as agent instructions
-        system_prompt = self._load_system_prompt()
+        return "".join(chunks)
 
-        # Create agent with system instructions if not already created
-        # or if we need to update instructions
-        if self.agent is None:
-            self.agent = self.chat.create_agent(instructions=system_prompt)
+    async def invoke_stream(self, question: str):
+        """
+        Process a user question and stream the response using Azure OpenAI.
 
+        This method:
+        1. Loads and formats the constitution with axiom data
+        2. Prepares the system prompt (used as agent instructions)
+        3. Formats the user prompt with the question and constitution
+        4. Creates a ChatAgent with system instructions
+        5. Streams the response from Azure OpenAI via the Agent Framework
+        6. Yields chunks of the response as they arrive
+
+        Args:
+            question: The user's question.
+
+        Yields:
+            String chunks of the AI-generated response as they are streamed.
+        """
         # Load and format user prompt with constitution and question
         user_prompt = self._load_and_format_user_prompt(question)
 
-        # Use asyncio to run the async agent
-        response = await self.agent.run(user_prompt)
-
-        return str(response.text)
+        # Stream the response from the agent
+        async for chunk in self.agent.run_stream(user_prompt):
+            if chunk.text:
+                yield chunk.text
