@@ -15,7 +15,7 @@ dependencies = [
   "python-dotenv>=1.0.0",
   "pydantic>=2.11.7",
   "scipy>=1.15.3",
-  "openai>=1.0.0",
+  "agent-framework==1.0.0b251028",
 ]
 
 [dependency-groups]
@@ -29,6 +29,7 @@ dev = [
 
 [tool.uv]
 default-groups = "all"
+prerelease = "allow"
 
 [project.urls]
 Homepage = "https://github.com/isabelcabezasm/constitutional-qa-agent"
