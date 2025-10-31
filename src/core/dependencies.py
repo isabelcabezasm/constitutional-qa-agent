@@ -15,10 +15,12 @@ def credential() -> TokenCredential:
     # Use WorkloadIdentityCredential if running in a Kubernetes environment
     return AzureCliCredential()
 
+
 @cache
 def azure_chat_openai():
     """Create and cache the Azure OpenAI chat client."""
     return azure_chat_openai_client(credential())
+
 
 @cache
 def chat_agent() -> ChatAgent:
@@ -27,9 +29,11 @@ def chat_agent() -> ChatAgent:
     system_prompt = system_prompt_file.read_text()
     return azure_chat_openai().create_agent(instructions=system_prompt)
 
+
 @cache
 def axiom_store():
     return load_from_json((root() / "data/constitution.json").read_text())
+
 
 @lru_cache(maxsize=32)
 def qa_engine() -> QAEngine:
