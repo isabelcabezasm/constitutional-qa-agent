@@ -209,6 +209,7 @@ class QAEngine:
 
         Note:
             TODO: Add support for conversation history with Message list.
+            TODO: Add support for reality
         """
         # Collect all chunks from the streaming response
         result = ""
@@ -241,6 +242,7 @@ class QAEngine:
 
         Note:
             TODO: Add support for conversation history with Message list.
+            TODO: Add support for reality
         """
         # Load and format user prompt with constitution and question
         user_prompt = self._load_and_format_user_prompt(question)

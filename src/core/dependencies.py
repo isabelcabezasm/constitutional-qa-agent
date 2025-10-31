@@ -12,6 +12,7 @@ from core.qa_engine import QAEngine
 
 @cache
 def credential() -> TokenCredential:
+    """Get Azure token credential for authentication."""
     # Use WorkloadIdentityCredential if running in a Kubernetes environment
     return AzureCliCredential()
 
@@ -25,13 +26,13 @@ def azure_chat_openai():
 @cache
 def chat_agent() -> ChatAgent:
     """Create and cache the ChatAgent with system prompt."""
-    system_prompt_file = root() / "src/core/prompts/system_prompt.md"
-    system_prompt = system_prompt_file.read_text()
+    system_prompt = (root() / "src/core/prompts/system_prompt.md").read_text()
     return azure_chat_openai().create_agent(instructions=system_prompt)
 
 
 @cache
 def axiom_store():
+    """Load and cache the constitutional axioms from JSON data file."""
     return load_from_json((root() / "data/constitution.json").read_text())
 
 
