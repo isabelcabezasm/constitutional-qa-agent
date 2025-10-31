@@ -2,12 +2,13 @@
 QA Engine for health insurance AI assistant.
 
 This module provides the QAEngine class that handles question-answering
-using Azure OpenAI with constitution-based prompting.
+using Azure OpenAI with constitution-based prompting via the Microsoft Agent Framework.
 """
 
 import json
 
-from openai import AzureOpenAI
+from agent_framework import ChatAgent
+from agent_framework.azure import AzureOpenAIChatClient
 
 from core.axiom_store import Axiom, AxiomStore
 from core.paths import root
@@ -18,32 +19,29 @@ class QAEngine:
     Question-Answering engine for health insurance queries.
 
     This class handles the orchestration of prompts, constitution loading,
-    and interaction with Azure OpenAI to provide contextualized responses
-    based on predefined axioms.
+    and interaction with Azure OpenAI via the Microsoft Agent Framework to provide
+    contextualized responses based on predefined axioms.
 
     Attributes:
-        chat (AzureOpenAI): The Azure OpenAI client for model inference.
-        deployment_name (str): The Azure OpenAI deployment name.
+        agent (ChatAgent): The chat agent for model inference.
         axiom_store (AxiomStore | None): Storage for axioms/constitution data.
     """
 
     def __init__(
         self,
-        chat: AzureOpenAI,
-        deployment_name: str,
+        chat: AzureOpenAIChatClient,
         axiom_store: AxiomStore | None = None,
     ):
         """
         Initialize the QA Engine.
 
         Args:
-            chat: Azure OpenAI client instance for model inference.
-            deployment_name: The Azure OpenAI deployment name to use for inference.
+            chat: Azure OpenAI chat client instance for model inference.
             axiom_store: Optional storage for axioms (defaults to loading from file).
         """
         self.chat = chat
-        self.deployment_name = deployment_name
         self.axiom_store = axiom_store
+        self.agent: ChatAgent | None = None
 
     def _load_constitution_data(self) -> list[Axiom]:
         """
@@ -136,16 +134,17 @@ class QAEngine:
 
         return formatted_prompt
 
-    def invoke(self, question: str) -> str:
+    async def invoke(self, question: str) -> str:
         """
         Process a user question and generate a response using Azure OpenAI.
 
         This method:
         1. Loads and formats the constitution with axiom data
-        2. Prepares the system prompt
+        2. Prepares the system prompt (used as agent instructions)
         3. Formats the user prompt with the question and constitution
-        4. Queries the Azure OpenAI model
-        5. Returns the generated response
+        4. Creates a ChatAgent with system instructions
+        5. Queries the Azure OpenAI model via the Agent Framework
+        6. Returns the generated response
 
         Args:
             question: The user's question about health insurance.
@@ -154,24 +153,18 @@ class QAEngine:
             The AI-generated response based on the constitution and prompts.
         """
 
-        # Load system prompt
+        # Load system prompt to use as agent instructions
         system_prompt = self._load_system_prompt()
 
-        # Load and format user prompt
+        # Create agent with system instructions if not already created
+        # or if we need to update instructions
+        if self.agent is None:
+            self.agent = self.chat.create_agent(instructions=system_prompt)
+
+        # Load and format user prompt with constitution and question
         user_prompt = self._load_and_format_user_prompt(question)
 
-        # Create messages for the chat completion
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ]
+        # Use asyncio to run the async agent
+        response = await self.agent.run(user_prompt)
 
-        # Query Azure OpenAI
-        response = self.chat.chat.completions.create(
-            model=self.deployment_name,
-            messages=messages,  # type: ignore
-            temperature=0.7,
-            max_tokens=1000,
-        )
-
-        return response.choices[0].message.content or ""
+        return str(response.text)

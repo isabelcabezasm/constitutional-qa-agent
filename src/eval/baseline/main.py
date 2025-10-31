@@ -2,7 +2,7 @@ from core.dependencies import qa_engine
 from eval.main import run_evaluation_with_qa_function
 
 
-def generate_answer(*, query: str) -> str:
+async def generate_answer(*, query: str) -> str:
     """
     Generate an answer for the given query.
 
@@ -21,7 +21,7 @@ def generate_answer(*, query: str) -> str:
         Generated answer for: What is Python?
     """
     print(f"Generating answer for query: {query}")
-    answer = qa_engine().invoke(question=query)
+    answer = await qa_engine().invoke(question=query)
     return answer
 
 
