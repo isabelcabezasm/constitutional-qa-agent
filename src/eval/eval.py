@@ -90,11 +90,11 @@ class AccuracyMetric(Metric):
 
 class CoverageMetric(Metric):
     """
-    A metric class for measuring code coverage during evaluation.
+    A metric class for measuring topic coverage during evaluation.
 
-    This metric tracks the percentage of code lines, branches, or functions that are
-    executed during test runs or evaluation processes. It provides insights into how
-    thoroughly the codebase is being tested or evaluated.
+    This metric tracks the degree to which responses cover expected topics or concepts
+    in the evaluation samples. It provides insights into how comprehensively the
+    system addresses the relevant subject matter.
 
     Attributes:
         Inherits all attributes from the base Metric class.
@@ -104,41 +104,41 @@ class CoverageMetric(Metric):
         methods to implement coverage-specific calculations.
 
     Usage:
-        Used to monitor and report code coverage statistics during automated testing or
-        evaluation workflows.
+        Used to monitor and report topic coverage statistics during evaluation
+        workflows.
     """
 
 
 class QuestionAnswerFunction(Protocol):
     """
-    Protocol for functions that generate scenarios from user queries.
+    Protocol for functions that generate answers from user queries.
 
     This protocol defines the interface for async functions that take a user's query
-    string and return a generated scenario. Implementations should process the query and
-    generate contextually relevant scenarios based on the input.
+    string and return a generated answer. Implementations should process the query and
+    generate contextually relevant responses based on the input.
 
     Methods:
         __call__(*, query: str) -> str: Async method that processes a query and
-            returns a generated scenario string.
+            returns a generated answer string.
 
     Example:
         >>> async def my_qa_function(*, query: str) -> str:
-        ...     return f"Generated scenario for: {query}"
+        ...     return f"Generated answer for: {query}"
         >>>
         >>> # Usage
-        >>> scenario = await my_qa_function(query="What if it rains?")
+        >>> answer = await my_qa_function(query="What if it rains?")
     """
 
     # this is just the protocol
     async def __call__(self, *, query: str) -> str:  # pyright: ignore[reportReturnType]
         """
-        Takes a user query and returns a generated scenario.
+        Takes a user query and returns a generated answer.
 
         Args:
             query: The user's query string
 
         Returns:
-            A generated scenario as a string
+            A generated answer as a string
         """
 
 
