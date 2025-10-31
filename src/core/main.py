@@ -4,10 +4,12 @@ Simple main script for testing the QA Engine.
 This script demonstrates basic usage of the QA Engine with a sample question.
 """
 
+import asyncio
+
 from core.dependencies import qa_engine
 
 
-def main():
+async def main():
     """Run a simple test of the QA Engine."""
     # Initialize the QA engine
     engine = qa_engine()
@@ -22,7 +24,7 @@ def main():
     print("Processing...\n")
 
     # Get response
-    response = engine.invoke(test_question)
+    response = await engine.invoke(test_question)
 
     print("Response:")
     print("-" * 80)
@@ -32,4 +34,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
