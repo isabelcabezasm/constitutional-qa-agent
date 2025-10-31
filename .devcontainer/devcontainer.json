@@ -14,7 +14,6 @@
                 "github.copilot", // GitHub Copilot + Copilot Chat
                 "markdown-lint.markdownlinter",
                 "ms-python.python", // Python extension
-                "ms-python.vscode-pylance", // Pylance extension for Python
                 "ms-python.debugpy", // Debugpy extension for Python        
                 "ms-toolsai.jupyter",
                 "charliermarsh.ruff",
