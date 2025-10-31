@@ -50,7 +50,6 @@ async def main():
                     citations.append(axiom)
 
     print("\n" + "-" * 80)
-    
     # Display references section if there are citations
     if citations:
         print("\n\033[1mReferences:\033[0m")
