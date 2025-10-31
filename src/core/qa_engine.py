@@ -1,5 +1,5 @@
 """
-QA Engine for health insurance AI assistant.
+QA Engine for constitutional AI assistant.
 
 This module provides the QAEngine class that handles question-answering
 using Azure OpenAI with constitution-based prompting via the Microsoft Agent Framework.
@@ -16,7 +16,7 @@ from core.paths import root
 
 class QAEngine:
     """
-    Question-Answering engine for health insurance queries.
+    Question-Answering engine for constitutional queries.
 
     This class handles the orchestration of prompts, constitution loading,
     and interaction with Azure OpenAI via the Microsoft Agent Framework to provide
@@ -147,7 +147,7 @@ class QAEngine:
         6. Returns the generated response
 
         Args:
-            question: The user's question about health insurance.
+            question: The user's question.
 
         Returns:
             The AI-generated response based on the constitution and prompts.
