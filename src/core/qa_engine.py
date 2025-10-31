@@ -177,9 +177,11 @@ class QAEngine:
         # Get formatted constitution
         constitution = self._load_and_format_constitution()
 
+        # Escape curly braces in the question to prevent .format() errors
+        safe_question = question.replace("{", "{{").replace("}", "}}")
         # Format user prompt with constitution and question using .format()
         formatted_prompt = user_prompt_template.format(
-            constitution=constitution, question=question
+            constitution=constitution, question=safe_question
         )
 
         return formatted_prompt
