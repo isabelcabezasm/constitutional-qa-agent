@@ -1,26 +1,26 @@
 from typing import Literal, TypeVar
 
-from agent_framework import ChatAgent
 from agent_framework.azure import AzureOpenAIChatClient
 from anyio import Path
 from pydantic import BaseModel
 
+from core.qa_engine import QAEngine
 from eval.metrics.models import AccuracyEvaluationResults, EntityExtraction
 
 T = TypeVar("T", bound=BaseModel)
 
 
-class QAEvalEngine:
+class QAEvalEngine(QAEngine):
     """
-    Question-Answering engine for health insurance queries.
+    Question-Answering engine for evaluation of health insurance queries.
 
-    This class handles the orchestration of prompts, constitution loading,
-    and interaction with Azure OpenAI via the Microsoft Agent Framework to provide
-    contextualized responses based on predefined axioms.
+    This class extends QAEngine to provide specialized evaluation capabilities
+    for accuracy assessment and entity extraction using structured outputs.
 
     Attributes:
-        agent (ChatAgent): The chat agent for model inference.
-        axiom_store (AxiomStore | None): Storage for axioms/constitution data.
+        agent (ChatAgent): The chat agent for model inference (inherited).
+        axiom_store (AxiomStore | None): Storage for axioms/constitution data
+            (inherited).
     """
 
     _INPUT_VARIABLES = [
@@ -39,14 +39,14 @@ class QAEvalEngine:
         chat: AzureOpenAIChatClient,
     ):
         """
-        Initialize the QA Engine.
+        Initialize the QA Evaluation Engine.
 
         Args:
             chat: Azure OpenAI chat client instance for model inference.
-            axiom_store: Optional storage for axioms (defaults to loading from file).
         """
-        self.chat = chat
-        self.agent: ChatAgent | None = None
+        # Initialize parent class without axiom_store since it's not needed
+        # for evaluation
+        super().__init__(chat, axiom_store=None)
 
     def _get_prompt(self, promptType: PromptTypes) -> str:
         """Load prompts."""
@@ -62,11 +62,11 @@ class QAEvalEngine:
         system_prompt = self._get_prompt("system")
 
         # Create agent with system instructions if not already created
-        # or if we need to update instructions
+        # or if we need to update instructions (reuse parent's pattern)
         if self.agent is None:
             self.agent = self.chat.create_agent(instructions=system_prompt)
 
-        # Use asyncio to run the async agent
+        # Use asyncio to run the async agent with structured output
         response = await self.agent.run(prompt, response_format=output_type)
         assert isinstance(response.value, output_type)
         return response.value
