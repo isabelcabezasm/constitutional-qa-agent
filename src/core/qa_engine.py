@@ -77,7 +77,7 @@ async def process_chunk(
             buffer = buffer[match.end() :]
 
         # Yield buffer if it doesn't contain an incomplete citation
-        if buffer and ("[" not in buffer) or ("]" in buffer):
+        if buffer and (("[" not in buffer) or ("]" in buffer)):
             yield TextContent(content=buffer)
             buffer = ""
 
