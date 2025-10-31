@@ -24,6 +24,7 @@ dev = [
   "ipykernel>=6.29.5",
   "pip>=25.1.1",
   "pytest>=8.4.1",
+  "coverage[toml]>=7.11.0",
 ]
 
 [tool.uv]

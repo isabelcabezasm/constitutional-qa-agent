@@ -94,36 +94,6 @@ def azure_chat_openai_client(
     /,
     *,
     config: AzureOpenAIConfig | None = None,
-) -> AzureOpenAI:
-    """
-    Create an Azure OpenAI client with token-based authentication.
-
-    Args:
-        token_credential: Azure token credential for authentication config:
-        Optional Azure OpenAI configuration, defaults to env-based
-                config
-
-    Returns:
-        Configured AzureOpenAI client instance
-    """
-
-    config = config or AzureOpenAIConfig.from_env()
-
-    client = AzureOpenAI(
-        api_version=config.api_version,
-        azure_endpoint=str(config.endpoint),
-        azure_ad_token_provider=get_bearer_token_provider(
-            token_credential, COGN_SERVICES_SCOPE
-        ),
-    )
-    return client
-
-
-def create_qa_engine_with_config(
-    token_credential: TokenCredential,
-    /,
-    *,
-    config: AzureOpenAIConfig | None = None,
 ) -> tuple[AzureOpenAI, str]:
     """
     Create an Azure OpenAI client and return both client and deployment name.
@@ -139,5 +109,11 @@ def create_qa_engine_with_config(
         Tuple of (AzureOpenAI client, deployment_name)
     """
     config = config or AzureOpenAIConfig.from_env()
-    client = azure_chat_openai_client(token_credential, config=config)
+    client = AzureOpenAI(
+        api_version=config.api_version,
+        azure_endpoint=str(config.endpoint),
+        azure_ad_token_provider=get_bearer_token_provider(
+            token_credential, COGN_SERVICES_SCOPE
+        ),
+    )
     return client, config.deployment_name
